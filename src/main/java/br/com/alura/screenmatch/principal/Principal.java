@@ -7,8 +7,10 @@ import br.com.alura.screenmatch.service.ConsumoApi;
 import br.com.alura.screenmatch.service.ConverteDados;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Scanner;
+import java.util.stream.Collectors;
 
 public class Principal {
     private final String ENDERECO = "https://www.omdbapi.com/?t=";
@@ -41,9 +43,19 @@ public class Principal {
 //            }
 //        }
 
-        temporadas.forEach(t ->
-                t.episodios().forEach(e ->
-                        System.out.println(e.titulo())));
+        temporadas.forEach(t -> t.episodios().forEach(e ->  System.out.println(e.titulo())));
+
+        List<DadosEpisodio> todosEpisodios = temporadas.stream()
+                .flatMap(t -> t.episodios().stream())
+                .collect(Collectors.toList());
+
+
+        System.out.println("\nMelhores episodios!\n");
+        todosEpisodios.stream()
+                .filter(e -> !e.avaliacao().equals("N/A"))
+                .sorted(Comparator.comparing(DadosEpisodio::avaliacao).reversed())
+                .limit(5)
+                .forEach(System.out::println);
     }
 
 }
