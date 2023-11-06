@@ -105,5 +105,15 @@ public class Principal {
                         Collectors.averagingDouble(Episodio::getAvaliacao)));
 
         System.out.println(avaliacoesPorTemporada);
+
+        DoubleSummaryStatistics est = episodios.stream()
+                .filter(e -> e.getAvaliacao() > 0.0)
+                .collect(Collectors.summarizingDouble(Episodio::getAvaliacao));
+
+        System.out.println("media = " + est.getAverage() + "\n" +
+                        "melhor episodio = " + est.getMax() + "\n" +
+                        " Pior episodio = " + est.getMin() + "\n" +
+                        " Quantidade toral de epis = " + est.getCount()
+                    );
     }
 }
